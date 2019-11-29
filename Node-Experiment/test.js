@@ -1,5 +1,7 @@
 
+/* we need to let node know we using one of it's method */
 
+let http = require("http")
 
 /* 
 
@@ -12,7 +14,14 @@ res // response
 
 
 let ourApp = http.createServer(function(req, res) {
-    res.end("Hello, and welcome to our website.")
+    if(req.url == "/"){
+        res.end("Hello, and welcome to our website.")
+    }
+    if(req.url == "/about"){
+        res.end("thank you for the interest in our webpage")
+    }
+
+    res.end("we can not find the page your looking for")
 
 }); 
 
@@ -20,4 +29,4 @@ let ourApp = http.createServer(function(req, res) {
 so this is say we have a server object and begining to listen. so basically when we have
 a server request is asking ourApp 
 */
-ourApp.listen()
+ourApp.listen(3000)

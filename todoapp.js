@@ -3,7 +3,7 @@
 <h1> to-do app</h1> 
 
 <form id="ourForm"> 
-	<input type = "text" autocomplet="off"? 
+	<input type = "text" autocomplet="off"> </input>
 	<button> Create </button>
 </form> 
 
@@ -14,8 +14,6 @@
 	<li> buy lottery <button> Delete</button> </li> 
 	<li> buy whole wheat bread <button> Delete</button> </li> 
 </ul> 
-
-
 
 
 
