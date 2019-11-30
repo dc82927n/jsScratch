@@ -1,11 +1,26 @@
 
 
 let express = require('express')
-
 let app = express()
+let mongodb = require('mongodb')
+let connectionString = 'mongodb+srv://todoAppUser:Asdf12@cluster0-umlek.mongodb.net/todoApp?retryWrites=true&w=majority'
+ // going to add our mongoDB atlas string above need to retrieve from mongodb account. 
+let db; // global variable for our client
+
+mongodb.connect(connectionString , {useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) {
+        db = client.db()
+        app.listen(3000)
+})
+
+
+
+
+
+app.use(express.urlencoded({extended: false}))
 
 app.get('/', function(req, res){
-    res.send(`<!DOCTYPE html>
+    db.collection('item').find().toArray(function(err, item){
+		res.send(`<!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8">
@@ -15,12 +30,12 @@ app.get('/', function(req, res){
     </head>
     <body>
       <div class="container">
-        <h1 class="display-4 text-center py-1">To-Do App</h1>
+        <h1 class="display-4 text-center py-1">To-Do App!!</h1>
         
         <div class="jumbotron p-3 shadow-sm">
-          <form action ="/creat-item" method="POST">
+          <form action="/create-item" method="POST">
             <div class="d-flex align-items-center">
-              <input autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
+              <input name="item" autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
               <button class="btn btn-primary">Add New Item</button>
             </div>
           </form>
@@ -54,19 +69,26 @@ app.get('/', function(req, res){
       
     </body>
     </html>`)
+	}) 
+    
 })
 
 
-app.post(`/create-item`, function(req, res){
-    console.log()
+app.post('/create-item', function(req, res){
+    db.collection('item').insertOne({text: req.body.item}, function(){
+        res.send("thanks for summiting the form")   
+    })
 })
+    
 
-app.listen(3000)
 
-app.post(("/create-item", function(req, res){
-	console.log("make this a dynamic") 
-	res.send("thanks for summiting the form") 
-})
+
+
+
+
+
+
+
 
 
 
