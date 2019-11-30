@@ -4,23 +4,23 @@ let express = require('express')
 let app = express()
 let mongodb = require('mongodb')
 let connectionString = 'mongodb+srv://todoAppUser:Asdf12@cluster0-umlek.mongodb.net/todoApp?retryWrites=true&w=majority'
- // going to add our mongoDB atlas string above need to retrieve from mongodb account. 
+// going to add our mongoDB atlas string above need to retrieve from mongodb account. 
 let db; // global variable for our client
 
-mongodb.connect(connectionString , {useNewUrlParser: true, useUnifiedTopology: true}, function(err, client) {
-        db = client.db()
-        app.listen(3000)
+mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, client) {
+    db = client.db()
+    app.listen(3000)
 })
 
 
 
 
 
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 
-app.get('/', function(req, res){
-    db.collection('item').find().toArray(function(err, item){
-		res.send(`<!DOCTYPE html>
+app.get('/', function (req, res) {
+    db.collection('item').find().toArray(function (err, item) {
+        res.send(`<!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8">
@@ -42,44 +42,34 @@ app.get('/', function(req, res){
         </div>
         
         <ul class="list-group pb-5">
-          <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-            <span class="item-text">Fake example item #1</span>
-            <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
-              <button class="delete-me btn btn-danger btn-sm">Delete</button>
-            </div>
-          </li>
-          <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-            <span class="item-text">Fake example item #2</span>
-            <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
-              <button class="delete-me btn btn-danger btn-sm">Delete</button>
-            </div>
-          </li>
-          <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
-            <span class="item-text">Fake example item #3</span>
-            <div>
-              <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
-              <button class="delete-me btn btn-danger btn-sm">Delete</button>
-            </div>
-          </li>
+            ${item.map(function(item) {
+            return `
+                <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+	            <span class="item-text">${item.text}</span>
+	            <div>
+	              <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+	              <button class="delete-me btn btn-danger btn-sm">Delete</button>
+	            </div>
+	          </li>
+            `
+        }).join("")}
         </ul>
         
       </div>
       
     </body>
     </html>`)
-	}) 
-    
+    })
+
 })
 
 
-app.post('/create-item', function(req, res){
-    db.collection('item').insertOne({text: req.body.item}, function(){
-        res.send("thanks for summiting the form")   
+app.post('/create-item', function (req, res) {
+    db.collection('item').insertOne({ text: req.body.item }, function () {
+        res.redirect("/")
     })
 })
-    
+
 
 
 
