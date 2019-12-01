@@ -66,23 +66,21 @@ app.get('/', function (req, res) {
     </html>`)
     })
 
+})
+
+    app.post('/create-item', function (req, res) {
+        db.collection('item').insertOne({text: req.body.item }, function () {
+            res.redirect("/")
+        })
+    })
+
     /* this going to allow the user to update the edit, grab the data from the database and update the data.  */
     app.post('/update-item', function(req, res){
-        db.collection('item').findOneAndUpdate(a,{$set:{text: req.body.text}},function(){
+        db.collection('item').findOneAndUpdate({_id: new mongodb.ObjectId(req.body.id)}, {$set:{text: req.body.text}},function(){
             res.send("sucess")
 
         })
     })
-
-})
-
-
-app.post('/create-item', function (req, res) {
-    db.collection('item').insertOne({ text: req.body.item }, function () {
-        res.redirect("/")
-    })
-})
-
 
 
 
