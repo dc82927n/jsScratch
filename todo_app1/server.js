@@ -15,8 +15,6 @@ mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: t
 })
 
 
-
-
 app.use(express.json())   // now we want it to be asyncronix req
 app.use(express.urlencoded({ extended: false })) //this is telling the express that uses the req.body object to the server
 
@@ -49,8 +47,8 @@ app.get('/', function (req, res) {
                 <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
 	            <span class="item-text">${item.text}</span>
 	            <div>
-	              <button data-id="${item._id}" btn btn-secondary btn-sm mr-1">Edit</button>
-	              <button class="delete-me btn btn-danger btn-sm">Delete</button>
+	              <button data-id="${item._id}" class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+	              <button data-id="${item._id}" class="delete-me btn btn-danger btn-sm">Delete</button>
 	            </div>
 	          </li>
             `
@@ -68,20 +66,31 @@ app.get('/', function (req, res) {
 
 })
 
-    app.post('/create-item', function (req, res) {
-        db.collection('item').insertOne({text: req.body.item }, function () {
-            res.redirect("/")
-        })
+app.post('/create-item', function (req, res) {
+    db.collection('item').insertOne({text: req.body.item }, function () {
+        res.redirect("/")
     })
+})
 
-    /* this going to allow the user to update the edit, grab the data from the database and update the data.  */
-    app.post('/update-item', function(req, res){
-        db.collection('item').findOneAndUpdate({_id: new mongodb.ObjectId(req.body.id)}, {$set:{text: req.body.text}},function(){
-            res.send("sucess")
+/* this going to allow the user to update the edit, grab the data from the database and update the data.  */
+app.post('/update-item', function(req, res){
+    db.collection('item').findOneAndUpdate({_id: new mongodb.ObjectId(req.body.id)}, {$set:{text: req.body.text}},function(){
+        res.send("sucess")
 
-        })
     })
+})
 
+
+
+app.post('/delete-item', function(req, res){
+  db.collection('item').deleteOne({_id: new mongodb.ObjectId(req.body.id)}, {$set:{text: req.body.text}}, function(){
+    res.send("sucess")
+  })
+})
+
+
+
+  
 
 
 
