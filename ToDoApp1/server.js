@@ -7,6 +7,8 @@ let connectionString = 'mongodb+srv://todoAppUser:Asdf12@cluster0-umlek.mongodb.
 // going to add our mongoDB atlas string above need to retrieve from mongodb account. 
 let db; // global variable for our client
 
+app.use(express.static("public"))
+
 mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, client) {
     db = client.db()
     app.listen(3000)
@@ -15,8 +17,8 @@ mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: t
 
 
 
-
-app.use(express.urlencoded({ extended: false }))
+app.use(express.json())   // now we want it to be asyncronix req
+app.use(express.urlencoded({ extended: false })) //this is telling the express that uses the req.body object to the server
 
 app.get('/', function (req, res) {
     db.collection('item').find().toArray(function (err, item) {
@@ -47,7 +49,7 @@ app.get('/', function (req, res) {
                 <li class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
 	            <span class="item-text">${item.text}</span>
 	            <div>
-	              <button class="edit-me btn btn-secondary btn-sm mr-1">Edit</button>
+	              <button data-id="${item._id}" btn btn-secondary btn-sm mr-1">Edit</button>
 	              <button class="delete-me btn btn-danger btn-sm">Delete</button>
 	            </div>
 	          </li>
@@ -56,9 +58,20 @@ app.get('/', function (req, res) {
         </ul>
         
       </div>
+
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script src ="/browser.js"> </script> 
       
     </body>
     </html>`)
+    })
+
+    /* this going to allow the user to update the edit, grab the data from the database and update the data.  */
+    app.post('/update-item', function(req, res){
+        db.collection('item').findOneAndUpdate(a,{$set:{text: req.body.text}},function(){
+            res.send("sucess")
+
+        })
     })
 
 })
