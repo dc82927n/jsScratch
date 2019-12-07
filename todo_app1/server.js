@@ -67,8 +67,8 @@ app.get('/', function (req, res) {
 })
 
 app.post('/create-item', function (req, res) {
-    db.collection('item').insertOne({text: req.body.item }, function () {
-        res.redirect("/")
+    db.collection('item').insertOne({text: req.body.text }, function (err, info) {
+        res.json(info.ops[0])
     })
 })
 
@@ -82,9 +82,9 @@ app.post('/update-item', function(req, res){
 
 
 
-app.post('/delete-item', function(req, res){
-  db.collection('item').deleteOne({_id: new mongodb.ObjectId(req.body.id)}, {$set:{text: req.body.text}}, function(){
-    res.send("sucess")
+app.post('/delete-item', function(req, res) {
+  db.collection('item').deleteOne({_id: new mongodb.ObjectId(req.body.id)}, function() {
+    res.send("Success")
   })
 })
 
