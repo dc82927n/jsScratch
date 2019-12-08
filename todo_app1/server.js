@@ -8,11 +8,17 @@ let connectionString = 'mongodb+srv://todoAppUser:Asdf12@cluster0-umlek.mongodb.
 // going to add our mongoDB atlas string above need to retrieve from mongodb account. 
 let db; // global variable for our client
 
+let port = process.env.PORT
+if (port == null || port == ""){
+  port = 3000 
+}
+
+
 app.use(express.static("public"))
 
 mongodb.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, client) {
     db = client.db()
-    app.listen(3000)
+    app.listen(port)
 })
 
 
