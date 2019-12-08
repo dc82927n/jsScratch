@@ -1,4 +1,4 @@
-//import { create } from "domain"
+
 
 function itemTemplate(item) {
   return `
@@ -12,7 +12,11 @@ function itemTemplate(item) {
 `
 }
 
-// document.addEventListener("click", function (e) {
+    //Intitial page load render
+    let ourHTML = item.map(function(item){
+      return itemTemplate(item)
+    }).join("")
+    document.getElementById("item-list").insertAdjacentHTML("beforeend", ourHTML)
 
     // Create feature 
     let createField = document.getElementById("create-field")
